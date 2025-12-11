@@ -70,7 +70,14 @@
         overflow:scroll;
         scrollbar-width:none
       }
-
+      .welcome-text{
+        text-align:center;
+        font-size:12px;
+        color:gray
+      }
+      .image{
+        margin:-15px;
+      }
     </style>
   </head>
   <body>
@@ -80,6 +87,7 @@
     <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
     <script src="https://unpkg.com/supersimpledev/chatbot.js"></script>
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+    
     <script type="text/babel">
 
       const container = document.querySelector('.js-container');
@@ -107,7 +115,7 @@
           ]
           setChatMessages([
             ...newChatMessages,{
-              message: "Loading",
+              message: <img className="image" height="40px"  src="loading-spinner.gif"></img>,
               sender: "robot",
               id: crypto.randomUUID()
             }
@@ -191,16 +199,23 @@
             ref = {chatMessagesRef}
           
           >
-
-            {chatMessages.map((chatmessage)=>{
-              return(
-                <ChatMessage
-                  message = {chatmessage.message}
-                  sender = {chatmessage.sender}
-                  key = {chatmessage.id}
-                />
-              );
-            })}
+            {chatMessages.length === 0 ?(
+              <p
+                className="welcome-text"
+              >
+                Welcome to the chatbot project! Send a message using the textbox below.
+              </p>
+              ): (
+              chatMessages.map((chatmessage)=>{
+                return(
+                  <ChatMessage
+                    message = {chatmessage.message}
+                    sender = {chatmessage.sender}
+                    key = {chatmessage.id}
+                  />
+                );
+              })
+          )}
           </div>
         )
       }
@@ -210,24 +225,17 @@
       function App(){
         const [chatMessages , setChatMessages ] = React.useState(
            [
-            {
-              message: "Hello ChatBot",
-              sender: "user",
-              id : "id1"
-            },
-            {
-              message: "Hello! How can I help you?",
-              sender: "robot",
-              id : "id2"
-            }
+            
           ] 
         );
         
         return(
           <div className="appContainer">
-            <ChatMessages 
-              chatMessages = {chatMessages}
+           
+              <ChatMessages 
+                chatMessages = {chatMessages}
               />
+            
             <ChatInput 
               chatMessages= {chatMessages}
               setChatMessages= {setChatMessages}
